@@ -1,0 +1,113 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #0a0b0d;
+  --bg2: #0f1114;
+  --bg3: #14171c;
+  --border: #1e2330;
+  --orange: #f5700a;
+  --orange-dim: #b84e00;
+  --gold: #c9a84c;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg);
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.3;
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-orange text-white border border-orange font-barlow font-semibold uppercase tracking-widest text-sm px-5 py-2 transition-all hover:bg-orange-dim hover:border-orange-dim cursor-pointer;
+  }
+  
+  .btn-ghost {
+    @apply bg-transparent text-[#8a95a3] border border-[#1e2330] font-barlow font-semibold uppercase tracking-widest text-sm px-5 py-2 transition-all hover:text-white hover:border-[#3a4050] hover:bg-bg3 cursor-pointer;
+  }
+  
+  .btn-outline {
+    @apply bg-transparent text-orange border border-orange font-barlow font-semibold uppercase tracking-widest text-sm px-5 py-2 transition-all hover:bg-orange/10 cursor-pointer;
+  }
+
+  .input-field {
+    @apply bg-bg3 border border-[#1e2330] text-[#cdd6e0] font-barlow text-sm px-4 py-2.5 outline-none w-full transition-colors focus:border-orange/50 placeholder:text-[#5a6475];
+  }
+
+  .card-base {
+    @apply bg-bg2 border border-[#1e2330] transition-all duration-200;
+  }
+
+  .section-title {
+    @apply font-rajdhani text-3xl font-bold text-white uppercase tracking-wide;
+  }
+
+  .badge {
+    @apply text-xs font-bold uppercase tracking-widest px-2 py-0.5 border;
+  }
+}
+
+@layer utilities {
+  .font-rajdhani { font-family: 'Rajdhani', sans-serif; }
+  .font-barlow { font-family: 'Barlow Condensed', sans-serif; }
+  .font-mono { font-family: 'JetBrains Mono', monospace; }
+  .text-orange { color: var(--orange); }
+  .bg-orange { background-color: var(--orange); }
+  .border-orange { border-color: var(--orange); }
+  .bg-bg { background-color: var(--bg); }
+  .bg-bg2 { background-color: var(--bg2); }
+  .bg-bg3 { background-color: var(--bg3); }
+  .bg-orange-dim { background-color: var(--orange-dim); }
+  .border-orange-dim { border-color: var(--orange-dim); }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: var(--bg2); }
+::-webkit-scrollbar-thumb { background: #2a3040; }
+::-webkit-scrollbar-thumb:hover { background: var(--orange-dim); }
+
+/* Ticker animation */
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.animate-ticker { animation: ticker 25s linear infinite; }
+
+/* Live dot pulse */
+@keyframes livePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(46,189,133,0.4); }
+  50% { box-shadow: 0 0 0 6px rgba(46,189,133,0); }
+}
+.live-dot {
+  width: 7px; height: 7px;
+  background: #2ebd85;
+  border-radius: 50%;
+  display: inline-block;
+  animation: livePulse 1.5s ease infinite;
+}
+
+/* Fade up */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeUp { animation: fadeUp 0.5s ease forwards; }
+
+/* Chat message */
+.chat-message-user { @apply ml-auto bg-orange/20 border border-orange/30; }
+.chat-message-admin { @apply mr-auto bg-bg3 border border-[#1e2330]; }

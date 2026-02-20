@@ -1,0 +1,149 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  username      String    @unique
+  password      String
+  role          Role      @default(USER)
+  isBanned      Boolean   @default(false)
+  banReason     String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  orders        Order[]
+  boostChats    BoostChat[] @relation("UserChats")
+  messages      Message[]
+  accounts      Account[] @relation("SellerAccounts")
+}
+
+enum Role {
+  USER
+  ADMIN
+  SUPERADMIN
+}
+
+model Account {
+  id          String      @id @default(cuid())
+  title       String
+  rank        String
+  hours       Int
+  year        Int
+  prime       Boolean     @default(true)
+  faceitLevel Int?
+  esea        String?
+  price       Float
+  originalPrice Float?
+  description String?
+  credentials String?     // Encrypted, shown only after purchase
+  imageUrl    String?
+  type        AccountType @default(CS2)
+  isAvailable Boolean     @default(true)
+  isFeatured  Boolean     @default(false)
+  seller      User        @relation("SellerAccounts", fields: [sellerId], references: [id])
+  sellerId    String
+  orders      Order[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+enum AccountType {
+  CS2
+  VALORANT
+  STEAM
+}
+
+model Skin {
+  id          String   @id @default(cuid())
+  name        String
+  weapon      String
+  wear        String
+  float       Float?
+  price       Float
+  originalPrice Float?
+  imageUrl    String?
+  stickers    String?
+  isStatTrak  Boolean  @default(false)
+  isSouvenir  Boolean  @default(false)
+  isAvailable Boolean  @default(true)
+  isFeatured  Boolean  @default(false)
+  orders      Order[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model BoostService {
+  id          String   @id @default(cuid())
+  name        String
+  fromRank    String
+  toRank      String
+  price       Float
+  estimatedHours Int
+  isAvailable Boolean  @default(true)
+  orders      Order[]
+  createdAt   DateTime @default(now())
+}
+
+model Order {
+  id            String      @id @default(cuid())
+  user          User        @relation(fields: [userId], references: [id])
+  userId        String
+  account       Account?    @relation(fields: [accountId], references: [id])
+  accountId     String?
+  skin          Skin?       @relation(fields: [skinId], references: [id])
+  skinId        String?
+  boostService  BoostService? @relation(fields: [boostServiceId], references: [id])
+  boostServiceId String?
+  total         Float
+  status        OrderStatus @default(PENDING)
+  discordTicket String?
+  notes         String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  CANCELLED
+  REFUNDED
+}
+
+model BoostChat {
+  id        String    @id @default(cuid())
+  user      User      @relation("UserChats", fields: [userId], references: [id])
+  userId    String
+  title     String
+  fromRank  String
+  toRank    String
+  status    ChatStatus @default(OPEN)
+  messages  Message[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+enum ChatStatus {
+  OPEN
+  IN_PROGRESS
+  CLOSED
+}
+
+model Message {
+  id        String    @id @default(cuid())
+  chat      BoostChat @relation(fields: [chatId], references: [id])
+  chatId    String
+  sender    User      @relation(fields: [senderId], references: [id])
+  senderId  String
+  content   String
+  isAdmin   Boolean   @default(false)
+  createdAt DateTime  @default(now())
+}
