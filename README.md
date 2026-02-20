@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 531 Accounts — Guía de Despliegue en Vercel
 
 ## 🚀 Stack Tecnológico
@@ -186,3 +187,6 @@ Visita: http://localhost:3000
 - **Pagos reales**: Este sistema simula el flujo de compra. Para pagos reales, integra Stripe o PayPal.
 - **Pusher Free**: El plan Sandbox soporta 100 conexiones simultáneas y 200k mensajes/día — suficiente para empezar.
 - **Vercel Postgres Free**: 60h de compute, 256MB almacenamiento — suficiente para comenzar.
+=======
+# 531-CS2
+>>>>>>> b6f3a4ba774679c133244bc3cf8207ef55c0d5d0
